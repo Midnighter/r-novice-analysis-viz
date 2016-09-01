@@ -44,166 +44,10 @@ Then load the required packages.
 
 ~~~
 library(edgeR)
-~~~
-{: .r}
-
-
-
-~~~
-Loading required package: limma
-~~~
-{: .output}
-
-
-
-~~~
 library(ggplot2)
 library(org.EcK12.eg.db)
 ~~~
 {: .r}
-
-
-
-~~~
-Loading required package: methods
-~~~
-{: .output}
-
-
-
-~~~
-Loading required package: AnnotationDbi
-~~~
-{: .output}
-
-
-
-~~~
-Loading required package: stats4
-~~~
-{: .output}
-
-
-
-~~~
-Loading required package: BiocGenerics
-~~~
-{: .output}
-
-
-
-~~~
-Loading required package: parallel
-~~~
-{: .output}
-
-
-
-~~~
-
-Attaching package: 'BiocGenerics'
-~~~
-{: .output}
-
-
-
-~~~
-The following objects are masked from 'package:parallel':
-
-    clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
-    clusterExport, clusterMap, parApply, parCapply, parLapply,
-    parLapplyLB, parRapply, parSapply, parSapplyLB
-~~~
-{: .output}
-
-
-
-~~~
-The following object is masked from 'package:limma':
-
-    plotMA
-~~~
-{: .output}
-
-
-
-~~~
-The following objects are masked from 'package:stats':
-
-    IQR, mad, sd, var, xtabs
-~~~
-{: .output}
-
-
-
-~~~
-The following objects are masked from 'package:base':
-
-    anyDuplicated, append, as.data.frame, cbind, colMeans,
-    colnames, colSums, do.call, duplicated, eval, evalq, Filter,
-    Find, get, grep, grepl, intersect, is.unsorted, lapply,
-    lengths, Map, mapply, match, mget, order, paste, pmax,
-    pmax.int, pmin, pmin.int, Position, rank, rbind, Reduce,
-    rowMeans, rownames, rowSums, sapply, setdiff, sort, table,
-    tapply, union, unique, unsplit, which, which.max, which.min
-~~~
-{: .output}
-
-
-
-~~~
-Loading required package: Biobase
-~~~
-{: .output}
-
-
-
-~~~
-Welcome to Bioconductor
-
-    Vignettes contain introductory material; view with
-    'browseVignettes()'. To cite Bioconductor, see
-    'citation("Biobase")', and for packages 'citation("pkgname")'.
-~~~
-{: .output}
-
-
-
-~~~
-Loading required package: IRanges
-~~~
-{: .output}
-
-
-
-~~~
-Loading required package: S4Vectors
-~~~
-{: .output}
-
-
-
-~~~
-
-Attaching package: 'S4Vectors'
-~~~
-{: .output}
-
-
-
-~~~
-The following object is masked from 'package:base':
-
-    expand.grid
-~~~
-{: .output}
-
-
-
-~~~
-
-~~~
-{: .output}
 
 `edgeR` comes with very good user manual. You can access it by
 
@@ -400,16 +244,16 @@ topTags(lrt)
 ~~~
 Coefficient:  t10 
      genes    logFC   logCPM       LR        PValue           FDR
-1464   mqo 5.983158 8.274567 501.9403 3.595841e-111 1.553044e-107
-411   cyoA 7.245625 9.872659 457.2819 1.876723e-101  4.052783e-98
-2240  sodA 7.363861 9.419456 444.0179  1.445488e-98  2.081021e-95
-1735  phoH 5.249411 6.500320 409.4168  4.909890e-91  5.301453e-88
-413   cyoC 6.132765 8.098590 401.7005  2.348380e-89  2.028531e-86
-415   cyoE 5.368193 8.313842 400.2178  4.937624e-89  3.554267e-86
-1867  puuD 4.451531 6.908350 383.1966  2.506241e-85  1.546351e-82
-674   fhuF 6.378681 7.996506 374.4949  1.965806e-83  1.061290e-80
-1186  iscR 4.453203 9.513508 369.8597  2.007899e-82  9.635683e-80
-227   betT 4.818171 8.357982 361.4161  1.384312e-80  5.978844e-78
+1464   mqo 5.983158 8.274567 501.8363 3.788200e-111 1.636124e-107
+411   cyoA 7.245625 9.872659 457.2736 1.884543e-101  4.069670e-98
+2240  sodA 7.363860 9.419456 444.0240  1.441070e-98  2.074661e-95
+1735  phoH 5.249415 6.500320 409.3635  5.042966e-91  5.445142e-88
+413   cyoC 6.132766 8.098590 401.6896  2.361164e-89  2.039573e-86
+415   cyoE 5.368196 8.313842 400.1644  5.071640e-89  3.650736e-86
+1867  puuD 4.451530 6.908350 383.1221  2.601531e-85  1.605145e-82
+674   fhuF 6.378675 7.996506 374.5202  1.940986e-83  1.047890e-80
+1186  iscR 4.453203 9.513508 369.7437  2.128146e-82  1.021274e-79
+227   betT 4.818173 8.357982 361.3547  1.427579e-80  6.165712e-78
 ~~~
 {: .output}
 
@@ -420,13 +264,6 @@ What did we just do? The `estimateDisp` function is needed to estimate variance 
 > It is often useful to export the data for use in other programs and sharing with colleagues. Use the `write.table` function to export a comma separated file with the output of `topTags` for all genes.
 > {: .r}
 {: .challenge}
-
-> ## Extra challenge: identifier mappings
->
-> Use the `merge` function and the mapping to bnumbers in `data/ecoli.csv` to also add a column with bnumbers as identifiers
-> {: .r}
-{: .challenge}
-
 
 
 ## Over-representation analysis of biological processes
@@ -470,19 +307,6 @@ We perform the GO over-representation analyis using `goana`. We define the speci
 
 ~~~
 goTable <- goana(deEntrez, universe=universe, species="EcK12")
-~~~
-{: .r}
-
-
-
-~~~
-Error in goana.default(deEntrez, universe = universe, species = "EcK12"): GO.db package required but not installed (or can't be loaded)
-~~~
-{: .error}
-
-
-
-~~~
 head(goTable[order(goTable$P.DE),])
 ~~~
 {: .r}
@@ -490,7 +314,20 @@ head(goTable[order(goTable$P.DE),])
 
 
 ~~~
-Error in head(goTable[order(goTable$P.DE), ]): object 'goTable' not found
+                                                          Term Ont   N  DE
+GO:0006091      generation of precursor metabolites and energy  BP 196 140
+GO:0015980 energy derivation by oxidation of organic compounds  BP 185 133
+GO:0045333                                cellular respiration  BP 168 121
+GO:0055114                         oxidation-reduction process  BP 213 140
+GO:0009061                               anaerobic respiration  BP 140 100
+GO:0009060                                 aerobic respiration  BP  65  55
+                   P.DE
+GO:0006091 2.367795e-45
+GO:0015980 1.912235e-43
+GO:0045333 2.009595e-39
+GO:0055114 1.290043e-38
+GO:0009061 8.139077e-32
+GO:0009060 6.101281e-24
 ~~~
-{: .error}
+{: .output}
 
