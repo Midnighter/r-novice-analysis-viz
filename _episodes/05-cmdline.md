@@ -82,20 +82,22 @@ Rscript session-info.R
 
 
 ~~~
-R version 3.3.3 (2017-03-06)
-Platform: x86_64-pc-linux-gnu (64-bit)
-Running under: Antergos Linux
+R version 3.4.0 (2017-04-21)
+Platform: x86_64-apple-darwin15.6.0 (64-bit)
+Running under: OS X El Capitan 10.11.6
+
+Matrix products: default
+BLAS: /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib
+LAPACK: /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libLAPACK.dylib
 
 locale:
- [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
- [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
- [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
- [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
- [9] LC_ADDRESS=C               LC_TELEPHONE=C            
-[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
 
 attached base packages:
 [1] stats     graphics  grDevices utils     datasets  base     
+
+loaded via a namespace (and not attached):
+[1] compiler_3.4.0
 ~~~
 {: .output}
 
@@ -133,7 +135,7 @@ Rscript print-args.R
 
 
 ~~~
-/usr/lib64/R/bin/exec/R
+/usr/local/Cellar/r/3.4.0_1/R.framework/Resources/bin/exec/R
 --slave
 --no-restore
 --file=print-args.R
@@ -162,7 +164,7 @@ R --slave --no-restore --file=print-args.R --args
 
 
 ~~~
-/usr/lib64/R/bin/exec/R
+/usr/local/Cellar/r/3.4.0_1/R.framework/Resources/bin/exec/R
 --slave
 --no-restore
 --file=print-args.R
@@ -182,7 +184,7 @@ Rscript print-args.R first second third
 
 
 ~~~
-/usr/lib64/R/bin/exec/R
+/usr/local/Cellar/r/3.4.0_1/R.framework/Resources/bin/exec/R
 --slave
 --no-restore
 --file=print-args.R

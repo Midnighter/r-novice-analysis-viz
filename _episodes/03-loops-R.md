@@ -436,14 +436,17 @@ list.files(path = "data", pattern = "csv")
 
 ~~~
  [1] "car-speeds-cleaned.csv" "car-speeds.csv"        
- [3] "inflammation-01.csv"    "inflammation-02.csv"   
- [5] "inflammation-03.csv"    "inflammation-04.csv"   
- [7] "inflammation-05.csv"    "inflammation-06.csv"   
- [9] "inflammation-07.csv"    "inflammation-08.csv"   
-[11] "inflammation-09.csv"    "inflammation-10.csv"   
-[13] "inflammation-11.csv"    "inflammation-12.csv"   
-[15] "sample.csv"             "small-01.csv"          
-[17] "small-02.csv"           "small-03.csv"          
+ [3] "deg.csv"                "ecoli.csv"             
+ [5] "GSE71562.csv"           "inflammation-01.csv"   
+ [7] "inflammation-02.csv"    "inflammation-03.csv"   
+ [9] "inflammation-04.csv"    "inflammation-05.csv"   
+[11] "inflammation-06.csv"    "inflammation-07.csv"   
+[13] "inflammation-08.csv"    "inflammation-09.csv"   
+[15] "inflammation-10.csv"    "inflammation-11.csv"   
+[17] "inflammation-12.csv"    "pheno.csv"             
+[19] "sample.csv"             "small-01.csv"          
+[21] "small-02.csv"           "small-03.csv"          
+[23] "yeast-growth.csv"      
 ~~~
 {: .output}
 
@@ -494,14 +497,17 @@ list.files(path = "data", pattern = "csv", full.names = TRUE)
 
 ~~~
  [1] "data/car-speeds-cleaned.csv" "data/car-speeds.csv"        
- [3] "data/inflammation-01.csv"    "data/inflammation-02.csv"   
- [5] "data/inflammation-03.csv"    "data/inflammation-04.csv"   
- [7] "data/inflammation-05.csv"    "data/inflammation-06.csv"   
- [9] "data/inflammation-07.csv"    "data/inflammation-08.csv"   
-[11] "data/inflammation-09.csv"    "data/inflammation-10.csv"   
-[13] "data/inflammation-11.csv"    "data/inflammation-12.csv"   
-[15] "data/sample.csv"             "data/small-01.csv"          
-[17] "data/small-02.csv"           "data/small-03.csv"          
+ [3] "data/deg.csv"                "data/ecoli.csv"             
+ [5] "data/GSE71562.csv"           "data/inflammation-01.csv"   
+ [7] "data/inflammation-02.csv"    "data/inflammation-03.csv"   
+ [9] "data/inflammation-04.csv"    "data/inflammation-05.csv"   
+[11] "data/inflammation-06.csv"    "data/inflammation-07.csv"   
+[13] "data/inflammation-08.csv"    "data/inflammation-09.csv"   
+[15] "data/inflammation-10.csv"    "data/inflammation-11.csv"   
+[17] "data/inflammation-12.csv"    "data/pheno.csv"             
+[19] "data/sample.csv"             "data/small-01.csv"          
+[21] "data/small-02.csv"           "data/small-03.csv"          
+[23] "data/yeast-growth.csv"      
 ~~~
 {: .output}
 
