@@ -1,0 +1,5 @@
+name,height,age,income
+Ian,183,27,12,000.01
+Peter,162,28,11,000.50
+Bernhard,173,30,10,000.00
+Steven,163,32,12,500.00

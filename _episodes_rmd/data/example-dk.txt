@@ -1,0 +1,5 @@
+name;height;age;income
+Ian;183;27;12000,01
+Peter;162;28;11100,50
+Bernhard;173;30;11000,00
+Steven;163;32;12500,00
