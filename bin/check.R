@@ -2,13 +2,15 @@ requiredR <- '3.4.0'
 
 cranPackages <- c('ggplot2'='2.2.1',
                   'dplyr'='0.7.3',
-                  'readxl'='1.0.0')
+                  'readxl'='1.0.0',
+                  'locfit'='1.5-9.1')
 
 biocPackages <- c('gage'='2.26.1',
                   'edgeR'='3.18.1',
                   'pcaMethods'='1.68.0',
                   'limma'='3.32.6',
-                  'org.EcK12.eg.db'='3.4.1')
+                  'org.EcK12.eg.db'='3.4.1',
+                  'GO.db'='3.4.1')
                   
 check <- function() {
     rVersion <- paste(version$major, version$minor, sep=".")
