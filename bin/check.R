@@ -2,6 +2,7 @@ requiredR <- '3.4.0'
 
 cranPackages <- c('ggplot2'='2.2.1',
                   'dplyr'='0.7.3',
+                  'tidyr'='0.7.1',
                   'readxl'='1.0.0',
                   'locfit'='1.5-9.1')
 

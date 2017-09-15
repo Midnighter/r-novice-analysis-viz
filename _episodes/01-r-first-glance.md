@@ -1,6 +1,6 @@
 ---
 title: "A brief introduction to R"
-teaching: 90
+teaching: 40
 exercises: 0
 questions:
 - "What is R and when should I use it?"
@@ -21,7 +21,6 @@ objectives:
 - "Select individual values and subsections from data."
 - "Perform operations on a data frame of data."
 - "Be able to install a package from CRAN."
-- "Display simple graphs using ggplot2."
 keypoints:
 - "R is a strong statistical computing environment"
 - "Thousands of packages for R"
@@ -35,15 +34,13 @@ keypoints:
 - "All the indexing and slicing that works on data frames also works on vectors."
 - "Use `#` to add comments to programs."
 - "Use `mean`, `max`, `min` and `sd` to calculate simple statistics."
-- "Use `tapply` to calculate statistics across the groups in a data frame."
-- "Use `ggplot` to create both simple and advanced visualizations."
+- "Use split-apply to calculate statistics across the groups in a data frame."
 ---
 
 
 
-git clone https://github.com/hredestig/r-novice-analysis-viz
 
-## What is R?
+## What is R? <!-- 2 -->
 
 R is a statistical computing environment that has become a widely adopted standard for data analysis various fields - notably bioinformatics.
 
@@ -53,7 +50,7 @@ R is a statistical computing environment that has become a widely adopted standa
   and often very high-level
 - There are thousands of package implementing algorithms, procedures,
   plots - for life science in particular
-- R is also a programming language. But not a great one.
+- R is also a programming language
 
 Consider using R to get access to packages that implement solution to a given problems like
 
@@ -65,9 +62,15 @@ Consider using R to get access to packages that implement solution to a given pr
 - multivariate statistics, mixed linear models,
 - and much much more..
 
-*With Python, we have the framework to write great software for data analysis - with R, that software is, for better or worse, often already written*
+In this one-day course we will learn
 
-## RStudio - a graphical interface to R
+- How to use RStudio, the most diverse and mature integrated
+  development environment for R
+- R's basic syntax
+- Re..
+- Visualising data using ggplot2
+
+## RStudio - a graphical interface to R <!-- 1 -->
 
 While R can be used directly in the shell, it is much nicer with a graphical interface. RStudio is by far the best one - let's learn how to use it.
 
@@ -78,7 +81,7 @@ While R can be used directly in the shell, it is much nicer with a graphical int
 * The best way to achieve this is to write scripts. RStudio provides an
   environment that allows you to do that.
 
-## Interacting with R
+## Interacting with R <!-- 2 -->
 
 There are two main ways of interacting with R: using the console or by using
 script files (plain text files that contain your code).
@@ -110,7 +113,7 @@ a complete command. This is because you have not 'closed' a parenthesis or
 quotation. If you're in RStudio and this happens, click inside the console
 window and press `Esc`; this should help you out of trouble.
 
-## R as a calculator and variable assignment
+## Basic R syntax and loading a package <!-- 7 -->
 
 Just like with python, we can perform simple operations using the R console and assign the output to variables
 
@@ -172,9 +175,18 @@ mean(randomNumbers)
 
 
 ~~~
-[1] 0.1650288
+[1] 0.2518529
 ~~~
 {: .output}
+
+> > ## Variable Naming Conventions
+>
+> Historically, R programmers have used a variety of conventions for naming variables. The `.` character
+> in R can be a valid part of a variable name; thus the above assignment could have easily been `random.numbers <- rnorm(10)`.
+> This is often confusing to R newcomers who have programmed in languages where `.` has a more significant meaning (like in Python).
+> There are many 'standards' in use e.g. `random.numbers`, `random_numbers` or `randomNumbers`. Choose what you prefer, but, just as with british or american spelling, the rule is to be consistent!
+{: .callout}
+
 
 > ## All those built-ins..
 >
@@ -184,7 +196,48 @@ mean(randomNumbers)
 > these work.
 {: .callout}
 
-## Getting help
+While plain R already comes with many functions, one almost always wants to make use of code contributed as packages. The concept is very similar to Python but has some important differences. Say we want to use the `readxl` package which allows us to read Excel sheets directly to R. If you by any chance do not have the `readxl` package on your system you have to install it first. This can be done via the menues in RStudio, or by typing:
+
+
+~~~
+install.packages("readxl")
+~~~
+{: .r}
+
+After that, we can load the package by:
+
+
+~~~
+library(readxl) # equivalent in Python would have been 'from readxl import *'
+~~~
+{: .r}
+
+To see what became available we can
+
+
+~~~
+ls('package:readxl') # or read the documentation
+help(package='readxl')
+~~~
+{: .r}
+
+Sometimes you just want to use one function and do not want to load all functions. Then you can, without loading the package call the functions using the `::` syntax.
+
+
+~~~
+readxl::readxl_example()
+~~~
+{: .r}
+
+
+
+~~~
+ [1] "clippy.xls"    "clippy.xlsx"   "datasets.xls"  "datasets.xlsx"
+ [5] "deaths.xls"    "deaths.xlsx"   "geometry.xls"  "geometry.xlsx"
+ [9] "type-me.xls"   "type-me.xlsx" 
+~~~
+{: .output}
+## Reading function documentation <!-- 1 -->
 
 All R functions are documented and you can read about them using RStudio documentation pane, or typing `?object`, eg
 
@@ -193,7 +246,7 @@ All R functions are documented and you can read about them using RStudio documen
 ?mean
 ~~~
 {: .r}
-## R data types
+## R data types <!-- 2 -->
 R has three main data types that we need to know about, the two main ones are `numeric` which is both integers and floats, `character`, and `factor` which is like integer but with a character label attached to number (or `level`). 
 
 
@@ -331,6 +384,23 @@ foo[[2]]
 
 
 ~~~
+foo[2]
+~~~
+{: .r}
+
+
+
+~~~
+$baz
+     [,1] [,2] [,3]
+[1,]    1    3    5
+[2,]    2    4    6
+~~~
+{: .output}
+
+
+
+~~~
 foo$baz
 ~~~
 {: .r}
@@ -346,7 +416,13 @@ foo$baz
 
 Finally, **data frames** but they are so important they deserve a small section on their own.
 
-## Read data into R
+For a rough comparison: 
+
+- R vectors are like lists (`[]`) in Python 
+- R lists are like dicts (`{}`) in Python
+- R data frames are very much like `pandas.DataFrame` in Python
+
+## Read data into R <!-- 7 -->
 
 Now that we know how to assign things to variables and use functions, let's read some yeast OD growth data into R using `read.table` and briefly examine the dataset.
  
@@ -377,7 +453,47 @@ growth <- read.table(file = "data/yeast-growth.csv", header = TRUE, sep = ",")
 > working directory using RStudio `Session` > `Set Working Directory..` or `setwd()`
 {: .callout}
 
-## Working with data frames
+
+> ## Reading Files from Different 'Locales'
+>
+> Depending on what countrys standard your computer is set to (the 'locale'), software such as Excel will use different characters to separate fields. E.g., the default for a computer with UK defaults will be to use ';' to separate fields and ',' to separate thousands. Try finding the right arguments to `read.table` to get something sensible out of `data/example-us.txt` and `data/example-dk.txt`.
+>
+> > ## Solution
+> > ~~
+> > read.table('data/example-uk.txt', sep=',', header=TRUE)
+> > read.table('data/example-dk.txt', sep=';', dec=',', header=TRUE)
+{: .challenge}
+
+Reading excel files is not natively supported in R so we need to use a special package for that, `readxl` is recommended.
+
+
+~~~
+library(readxl)
+read_xlsx('data/yeast-growth.xlsx')
+~~~
+{: .r}
+
+
+
+~~~
+# A tibble: 455 x 5
+   concentration   strain timepoint    od medium
+           <dbl>    <chr>     <dbl> <dbl>  <chr>
+ 1         1e-02 strain-a         1 0.017    low
+ 2         3e-02 strain-b         1 0.017    low
+ 3         1e+00 strain-c         1 0.018 medium
+ 4         3e+00 strain-d         1 0.017 medium
+ 5         3e+01 strain-e         1 0.017 medium
+ 6         1e+02 strain-f         1 0.016   high
+ 7         3e+02 strain-g         1 0.015   high
+ 8         1e-02 strain-a         2 0.015    low
+ 9         3e-02 strain-b         2 0.018    low
+10         1e+00 strain-c         2 0.021 medium
+# ... with 445 more rows
+~~~
+{: .output}
+
+## Working with data frames <!-- 10 -->
 
 Now that our data is loaded in memory, we can start doing things with it.
 First, let's ask what type of thing `growth` is:
@@ -391,13 +507,13 @@ head(growth)
 
 
 ~~~
-     V3   strain timepoint    od medium
-1 1e-02 strain-a         1 0.017    low
-2 3e-02 strain-b         1 0.017    low
-3 1e+00 strain-c         1 0.018 medium
-4 3e+00 strain-d         1 0.017 medium
-5 3e+01 strain-e         1 0.017 medium
-6 1e+02 strain-f         1 0.016   high
+  concentration   strain timepoint    od medium
+1         1e-02 strain-a         1 0.017    low
+2         3e-02 strain-b         1 0.017    low
+3         1e+00 strain-c         1 0.018 medium
+4         3e+00 strain-d         1 0.017 medium
+5         3e+01 strain-e         1 0.017 medium
+6         1e+02 strain-f         1 0.016   high
 ~~~
 {: .output}
 
@@ -412,11 +528,11 @@ str(growth) # what data types are the different columns?
 
 ~~~
 'data.frame':	455 obs. of  5 variables:
- $ V3       : num  1e-02 3e-02 1e+00 3e+00 3e+01 1e+02 3e+02 1e-02 3e-02 1e+00 ...
- $ strain   : Factor w/ 7 levels "strain-a","strain-b",..: 1 2 3 4 5 6 7 1 2 3 ...
- $ timepoint: int  1 1 1 1 1 1 1 2 2 2 ...
- $ od       : num  0.017 0.017 0.018 0.017 0.017 0.016 0.015 0.015 0.018 0.021 ...
- $ medium   : Factor w/ 3 levels "high","low","medium": 2 2 3 3 3 1 1 2 2 3 ...
+ $ concentration: num  1e-02 3e-02 1e+00 3e+00 3e+01 1e+02 3e+02 1e-02 3e-02 1e+00 ...
+ $ strain       : Factor w/ 7 levels "strain-a","strain-b",..: 1 2 3 4 5 6 7 1 2 3 ...
+ $ timepoint    : int  1 1 1 1 1 1 1 2 2 2 ...
+ $ od           : num  0.017 0.017 0.018 0.017 0.017 0.016 0.015 0.015 0.018 0.021 ...
+ $ medium       : Factor w/ 3 levels "high","low","medium": 2 2 3 3 3 1 1 2 2 3 ...
 ~~~
 {: .output}
 
@@ -498,15 +614,13 @@ growth[1:4, 1:2]
 
 
 ~~~
-    V3   strain
-1 0.01 strain-a
-2 0.03 strain-b
-3 1.00 strain-c
-4 3.00 strain-d
+  concentration   strain
+1          0.01 strain-a
+2          0.03 strain-b
+3          1.00 strain-c
+4          3.00 strain-d
 ~~~
 {: .output}
-
-The [slice]({{ site.github.url }}/reference/#slice) `1:4` means, "Values from 1 to 4."
 
 We can use the function `c`, which stands for **c**oncatenate, to select non-contiguous values:
 
@@ -519,17 +633,17 @@ growth[c(3, 8, 37, 56), c(1, 3)]
 
 
 ~~~
-      V3 timepoint
-3  1e+00         1
-8  1e-02         2
-37 3e-02         6
-56 3e+02         8
+   concentration timepoint
+3          1e+00         1
+8          1e-02         2
+37         3e-02         6
+56         3e+02         8
 ~~~
 {: .output}
 
-We also don't have to provide a slice for either the rows or the columns.
-If we don't include a slice for the rows, R returns all the rows; if we don't include a slice for the columns, R returns all the columns.
-If we don't provide a slice for either rows or columns, e.g. `growth[, ]`, R returns the full data frame.
+We also don't have to provide a subset for either the rows or the columns.
+If we don't include a subset for the rows, R returns all the rows; if we don't include a subset for the columns, R returns all the columns.
+If we don't provide a subset for either rows or columns, e.g. `growth[, ]`, R returns the full data frame.
 
 
 ~~~
@@ -540,8 +654,8 @@ growth[5, ]
 
 
 ~~~
-  V3   strain timepoint    od medium
-5 30 strain-e         1 0.017 medium
+  concentration   strain timepoint    od medium
+5            30 strain-e         1 0.017 medium
 ~~~
 {: .output}
 
@@ -550,7 +664,6 @@ growth[5, ]
 > Columns can also be addressed by name, with either the `$` operator (ie. `growth$medium`) or square brackets (ie. `growth[,"medium"]`).
 > You can learn more about subsetting by column name in this supplementary [lesson]({{ site.github.url }}/10-supp-addressing-data/).
 {: .callout}
-
 
 Particularly useful is also to user other vectors as filters and only return the rows that evaluate to `TRUE`. Here, `growth$strain == "strain-e"` gives a vector with `TRUE` or `FALSE` for every element in `growth$strain` that is equal to `"strain-e"`.
 
@@ -563,13 +676,13 @@ head(growth[growth$strain == "strain-e",])
 
 
 ~~~
-   V3   strain timepoint    od medium
-5  30 strain-e         1 0.017 medium
-12 30 strain-e         2 0.019 medium
-19 30 strain-e         3 0.016 medium
-26 30 strain-e         4 0.022 medium
-33 30 strain-e         5 0.022 medium
-40 30 strain-e         6 0.022 medium
+   concentration   strain timepoint    od medium
+5             30 strain-e         1 0.017 medium
+12            30 strain-e         2 0.019 medium
+19            30 strain-e         3 0.016 medium
+26            30 strain-e         4 0.022 medium
+33            30 strain-e         5 0.022 medium
+40            30 strain-e         6 0.022 medium
 ~~~
 {: .output}
 
@@ -588,6 +701,16 @@ max(growth[growth$strain == "strain-e", "od"])
 ~~~
 {: .output}
 
+> ## Forcing Conversion
+>
+> Note that R may return an error when you attempt to perform similar calculations on 
+> subsetted *rows* of data frames. This is because some functions in R automatically convert 
+> the object type to a numeric vector, while others do not (e.g. `max(growth[1, ])` works as 
+> expected, while `mean(growth[1, ])` returns an error). You can fix this by including an 
+> explicit call to `as.numeric()`, e.g. `mean(as.numeric(growth[1, ]))` (but mostly this is not what you want to do). By contrast,  calculations on subsetted *columns* always work as expected, since columns of data frames  are already defined as vectors.
+{: .callout}
+
+Particularly useful is also to user other vectors as filters and only return the rows that evaluate to `TRUE`. Here, `growth$strain 
 R also has functions for other common calculations, e.g. finding the minimum, mean, and standard deviation of the data:
 
 
@@ -631,94 +754,42 @@ sd(growth[growth$strain == "strain-e", "od"])
 ~~~
 {: .output}
 
-We may want to compare the different strains and for that we can use the split-apply approach which is very common in R. One (out of many) functions in R that implements this is `tapply`
+We may want to compare the different strains and for that we can use the split-apply approach which is very common in R. A common approach is to first split the data:
 
 
 ~~~
-#tapply(growth$od, growth$strain, max)
+splitData <- split(growth$od, growth$strain)
+ ## and then apply a function
+sapply(splitData, max)
 ~~~
 {: .r}
+
+
+
+~~~
+strain-a strain-b strain-c strain-d strain-e strain-f strain-g 
+   0.237    0.233    0.231    0.221    0.065    0.040    0.034 
+~~~
+{: .output}
+
+
+
+~~~
+ ## or in one go
+tapply(growth$od, growth$strain, max)
+~~~
+{: .r}
+
+
+
+~~~
+strain-a strain-b strain-c strain-d strain-e strain-f strain-g 
+   0.237    0.233    0.231    0.221    0.065    0.040    0.034 
+~~~
+{: .output}
 
 <img src="../fig/split-apply.svg" alt="the split apply approach, divide data to chunks, then run a given function on each ot the chunk sepearately" />
 
-There are many more `apply` style functions among which `lapply` for applying functions of to elements of lists, `apply` for applying functions to rows or columns of a matrix. 
+There are many more `apply` style functions among which `lapply` for applying functions to elements of lists, `apply` for applying functions to rows or columns of a matrix.
 
-> ## Other forms of apply
->
-> `split` is a function that can turn an array to a list based on another variable that indicates the groups, e.g. our 'strains'. Read a bit about `split` then use it together with `lapply` to achieve the same result as `tapply(growth$od, growth$strain, max)`
-{: .challenge}
-
-## Installing a package
-Next we will plot our data but since the default graphics system in R is quite cumbersome to use, and there is a very popular both easy to use and the same time very flexible package for making beautiful plots, we will use that instead - `ggplot2`. Since `ggplot2` isn't included with R by default, we first have to install it. 
-
-Install in RStudio by the menu system or type
-
-~~~
-install.packages("ggplot2")
-~~~
-{: .r}
-
-This will also install a number of packages that `ggplot2` depends on. Once done, load the package from the library by
-
-
-~~~
-library(ggplot2)
-~~~
-{: .r}
-
-
-
-## Plotting our data
-
-`ggplot2` works well with data frames, particularly when formatted in the 'long' format that our growth data is already in. Plots are initialized with the `ggplot()` function and then we add layers to it to represent the data. Let's first make a simple scatter plot.
-
-
-~~~
-ggplot(growth, aes(x=timepoint, y=od)) +
-    geom_point()
-~~~
-{: .r}
-
-<img src="../fig/rmd-01-r-brief-introduction-unnamed-chunk-23-1.png" title="plot of chunk unnamed-chunk-23" alt="plot of chunk unnamed-chunk-23" style="display: block; margin: auto;" />
-
-Let's add another layer, a line this time.
-
-
-~~~
-ggplot(growth, aes(x=timepoint, y=od)) +
-    geom_point() +
-    geom_line()
-~~~
-{: .r}
-
-<img src="../fig/rmd-01-r-brief-introduction-unnamed-chunk-24-1.png" title="plot of chunk unnamed-chunk-24" alt="plot of chunk unnamed-chunk-24" style="display: block; margin: auto;" />
-
-Oops, that looks funny. Why? Because we haven't informed ggplot about the strains that each should make up a trajectory in our plot. We can do that by simply adding strain as another aesthetic. 
-
-
-~~~
-ggplot(growth, aes(x=timepoint, y=od, color=strain)) +
-    geom_point() +
-    geom_line()
-~~~
-{: .r}
-
-<img src="../fig/rmd-01-r-brief-introduction-unnamed-chunk-25-1.png" title="plot of chunk unnamed-chunk-25" alt="plot of chunk unnamed-chunk-25" style="display: block; margin: auto;" />
-
-Plotting each line in separat facet would have been another option
-
-
-~~~
-ggplot(growth, aes(x=timepoint, y=od)) +
-    geom_point() +
-    geom_line() +
-    facet_wrap(~strain)
-~~~
-{: .r}
-
-<img src="../fig/rmd-01-r-brief-introduction-unnamed-chunk-26-1.png" title="plot of chunk unnamed-chunk-26" alt="plot of chunk unnamed-chunk-26" style="display: block; margin: auto;" />
-
-`ggplot2` can present data in a large number of ways, explore the
-[online documentation](http://docs.ggplot2.org) or the
-[R graph gallery](http://www.r-graph-gallery.com/portfolio/ggplot2-package/)
-for inspiration.
+Two great packages for doing much more advanced things with data frame are `dplyr` and `tidyr` which together overlaps a lot with Python pandas but these packages are not within scope here.

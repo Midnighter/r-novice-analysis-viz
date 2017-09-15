@@ -21,7 +21,7 @@ keypoints:
 
 ```{r, include = FALSE}
 source("../bin/chunk-options.R")
-knitr_fig_path("01-r-brief-introduction-")
+knitr_fig_path("03-data-visualisation-")
 ```
 
 ## The grammar of graphics <!-- 2 -->
@@ -49,7 +49,9 @@ Will typically be much easier to plot than something like
 | foo     | 0.1     | 0.2     |
 | bar     | 0.1     | 0.3     |
 
-To convert between the two, using the `dplyr` package or quickly jump back to Python pandas.
+This is because in the first case, each column can become an aesthetic whereas in the second, both `od_poor` and `od_rich` will likely map to the aesthetic `od` and this is generally not supported by ggplot2.
+
+To tidy your data consider, using the `dplyr`/`tidyr` packages or perhaps better quickly jump back to Python pandas and export a nice csv file.
 ## A first plot <!-- 5 -->
 Let's load ggplot2 and the yeast growth data.
 
@@ -176,7 +178,6 @@ ggplot(plate, aes(x=time, y=od)) +
     geom_point(size=0.1) +
     geom_line() +
     facet_grid(column~row)
-
 ```
 ## Themes <!-- 2 -->
 If you don't like the default appearance, ggplot2 comes with flexible ways to customize your plots. The most high-level way of doing this is to use themes.
