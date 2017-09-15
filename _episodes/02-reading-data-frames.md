@@ -1,5 +1,5 @@
 ---
-title: "Reading data to a data frame"
+title: "Reading data to a data frame and performing basic operations"
 teaching: 30
 exercises: 0
 questions:
@@ -41,10 +41,24 @@ growth <- read.table(file = "data/yeast-growth.csv", header = TRUE, sep = ",")
 >
 > What happens if you put `header = FALSE`? The default value is `header = TRUE`?. What do you expect will happen if you leave the default value? Before you run any code, think about what will happen to the first few rows of your data frame, and its overall size. Then run the following code and see if your expectations agree:
 >
+> 
 > ~~~
 > head(read.table(file = "data/yeast-growth.csv", header = FALSE, sep = ","))
 > ~~~
 > {: .r}
+> 
+> 
+> 
+> ~~~
+>     V1        V2    V3                  V4            V5
+> 1 well timepoint    od concentration_level concentration
+> 2    a         1 0.017                 low          0.01
+> 3    b         1 0.017                 low          0.03
+> 4    c         1 0.018              medium             1
+> 5    d         1 0.017              medium             3
+> 6    e         1 0.017              medium            30
+> ~~~
+> {: .output}
 {: .challenge}
 
 
@@ -63,10 +77,41 @@ growth <- read.table(file = "data/yeast-growth.csv", header = TRUE, sep = ",")
 > Depending on what countrys standard your computer is set to (the 'locale'), software such as Excel will use different characters to separate fields. E.g., the default for a computer with UK defaults will be to use ';' to separate fields and ',' to separate thousands. Try finding the right arguments to `read.table` to get something sensible out of `data/example-us.txt` and `data/example-dk.txt`.
 >
 > > ## Solution
-> > ~~
+> > 
+> > ~~~
 > > read.table('data/example-uk.txt', sep=',', header=TRUE)
+> > ~~~
+> > {: .r}
+> > 
+> > 
+> > 
+> > ~~~
+> >          name height age income
+> > Ian       183     27  12  1e-02
+> > Peter     162     28  11  5e-01
+> > Bernhard  173     30  10  0e+00
+> > Steven    163     32  12  5e+02
+> > ~~~
+> > {: .output}
+> > 
+> > 
+> > 
+> > ~~~
 > > read.table('data/example-dk.txt', sep=';', dec=',', header=TRUE)
-> > ~~
+> > ~~~
+> > {: .r}
+> > 
+> > 
+> > 
+> > ~~~
+> >       name height age   income
+> > 1      Ian    183  27 12000.01
+> > 2    Peter    162  28 11100.50
+> > 3 Bernhard    173  30 11000.00
+> > 4   Steven    163  32 12500.00
+> > ~~~
+> > {: .output}
+> {: .solution}
 {: .challenge}
 
 Reading excel files is not natively supported in R so we need to use a special package for that, `readxl` is recommended.

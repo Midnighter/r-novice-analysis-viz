@@ -48,166 +48,10 @@ Then load the required packages.
 
 ~~~
 library(edgeR)
-~~~
-{: .r}
-
-
-
-~~~
-Loading required package: limma
-~~~
-{: .output}
-
-
-
-~~~
 library(ggplot2)
 library(org.EcK12.eg.db)
 ~~~
 {: .r}
-
-
-
-~~~
-Loading required package: methods
-~~~
-{: .output}
-
-
-
-~~~
-Loading required package: AnnotationDbi
-~~~
-{: .output}
-
-
-
-~~~
-Loading required package: stats4
-~~~
-{: .output}
-
-
-
-~~~
-Loading required package: BiocGenerics
-~~~
-{: .output}
-
-
-
-~~~
-Loading required package: parallel
-~~~
-{: .output}
-
-
-
-~~~
-
-Attaching package: 'BiocGenerics'
-~~~
-{: .output}
-
-
-
-~~~
-The following objects are masked from 'package:parallel':
-
-    clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
-    clusterExport, clusterMap, parApply, parCapply, parLapply,
-    parLapplyLB, parRapply, parSapply, parSapplyLB
-~~~
-{: .output}
-
-
-
-~~~
-The following object is masked from 'package:limma':
-
-    plotMA
-~~~
-{: .output}
-
-
-
-~~~
-The following objects are masked from 'package:stats':
-
-    IQR, mad, sd, var, xtabs
-~~~
-{: .output}
-
-
-
-~~~
-The following objects are masked from 'package:base':
-
-    anyDuplicated, append, as.data.frame, cbind, colMeans,
-    colnames, colSums, do.call, duplicated, eval, evalq, Filter,
-    Find, get, grep, grepl, intersect, is.unsorted, lapply,
-    lengths, Map, mapply, match, mget, order, paste, pmax,
-    pmax.int, pmin, pmin.int, Position, rank, rbind, Reduce,
-    rowMeans, rownames, rowSums, sapply, setdiff, sort, table,
-    tapply, union, unique, unsplit, which, which.max, which.min
-~~~
-{: .output}
-
-
-
-~~~
-Loading required package: Biobase
-~~~
-{: .output}
-
-
-
-~~~
-Welcome to Bioconductor
-
-    Vignettes contain introductory material; view with
-    'browseVignettes()'. To cite Bioconductor, see
-    'citation("Biobase")', and for packages 'citation("pkgname")'.
-~~~
-{: .output}
-
-
-
-~~~
-Loading required package: IRanges
-~~~
-{: .output}
-
-
-
-~~~
-Loading required package: S4Vectors
-~~~
-{: .output}
-
-
-
-~~~
-
-Attaching package: 'S4Vectors'
-~~~
-{: .output}
-
-
-
-~~~
-The following object is masked from 'package:base':
-
-    expand.grid
-~~~
-{: .output}
-
-
-
-~~~
-
-~~~
-{: .output}
 
 `edgeR` comes with very good user manual. You can access it by
 
@@ -320,29 +164,6 @@ Then we perform PCA using the `pcaMethods` package.
 
 ~~~
 library(pcaMethods)
-~~~
-{: .r}
-
-
-
-~~~
-
-Attaching package: 'pcaMethods'
-~~~
-{: .output}
-
-
-
-~~~
-The following object is masked from 'package:stats':
-
-    loadings
-~~~
-{: .output}
-
-
-
-~~~
 pcaFit <- pca(log2(t(wulffenCpm) + 0.25))
 pcaFit
 ~~~
@@ -419,6 +240,8 @@ The time-series can easily be recognized which is a good sign that experiment wa
 > {: .r}
 {: .challenge}
 
+Scatter plots are also a great way to FIXME
+
 ## Differentially expressed genes <!-- 10 -->
 
 From our PCA we could, as expected, see that the last timepoint is the most dissimilar from the the anaerobic condition. Let's make a comparison between the anaerobic and 10 min anearobic samples and see which genes are differentially expressed between those.
@@ -492,11 +315,13 @@ What did we just do? The `estimateDisp` function is needed to estimate variance 
 > ## Extra challenge: identifier mappings
 >
 > Use the `merge` function and the mapping to bnumbers in `data/ecoli.csv` to also add a column with bnumbers as identifiers
+> 
 > > ## Solution
-> > ~~
+> > 
+> > ~~~
 > > df <- merge(topTags(lrt, n=Inf), read.csv("data/ecoli.csv"))
 > > write.csv(df, file="data/deg.csv", quote=FALSE, row.names=FALSE)
-> > ~~
+> > ~~~
 > > {: .r}
 > {: .solution}
 {: .challenge}
@@ -611,11 +436,13 @@ mapIds(org.EcK12.eg.db, 'yaaJ', 'ENTREZID', keytype='SYMBOL')
 > ## Simple linkout to a paper
 >
 > Which paper mentions the yaaJ gene?
+> 
 > > ## Solution
-> > ~~
+> > 
+> > ~~~
 > > pmid <- mapIds(org.EcK12.eg.db, 'yaaJ', 'PMID', keytype='SYMBOL')[1]
 > > browseURL(paste0('https://www.ncbi.nlm.nih.gov/pubmed/?term=', pmid))
-> > ~~
+> > ~~~
 > > {: .r}
 > {: .solution}
 {: .challenge}
@@ -623,9 +450,18 @@ mapIds(org.EcK12.eg.db, 'yaaJ', 'ENTREZID', keytype='SYMBOL')
 ## Over-representation analysis of biological processes <!-- 10 -->
 We want to examine if the most differentially expressed genes have any particular biological processes in common. We will do this using the function `gage` from the `gage` package to perform Gene Set Enrichment Analysis (GSEA). The input to `gage` must be Entrez identifiers so we first need to map our gene symbols to Entrez. Bioconductor conveniently provides this mapping so all we need to do is to load the right annotation package and map our identifiers. We also define an object `universe` which holds all the genes which were present in our dataset, and which could be mapped to Entrez identifiers - that is simply all our mapped genes except the missing values (na = not available).
 
+First we need to load some packages that we are going to use.
+
 
 ~~~
 library(org.EcK12.eg.db)
+library(GO.db)
+library(gage)
+~~~
+{: .r}
+
+
+~~~
 symbol2entrez <- mapIds(org.EcK12.eg.db, rownames(lrt), "ENTREZID", keytype="SYMBOL")
 ~~~
 {: .r}
@@ -650,118 +486,20 @@ Next we need to create a mapping between gene identifiers and GO terms.
 
 ~~~
 allGo <- as.list(GOTERM)
-~~~
-{: .r}
-
-
-
-~~~
-Error in as.list(GOTERM): object 'GOTERM' not found
-~~~
-{: .error}
-
-
-
-~~~
 bp <- Filter(function(go) go@Ontology == 'BP', allGo)
-~~~
-{: .r}
-
-
-
-~~~
-Error in Filter(function(go) go@Ontology == "BP", allGo): object 'allGo' not found
-~~~
-{: .error}
-
-
-
-~~~
 goMapping <- mget(names(bp), org.EcK12.egGO2ALLEGS, ifnotfound=NA)
 ~~~
 {: .r}
-
-
-
-~~~
-Error in mget(names(bp), org.EcK12.egGO2ALLEGS, ifnotfound = NA): object 'bp' not found
-~~~
-{: .error}
 
 Then we do the gene set enrichment analysis
 
 
 ~~~
 goFc <- gage(fc, goMapping)
-~~~
-{: .r}
-
-
-
-~~~
-Error in gage(fc, goMapping): could not find function "gage"
-~~~
-{: .error}
-
-
-
-~~~
 goGreater <- as.data.frame(goFc$greater)
-~~~
-{: .r}
-
-
-
-~~~
-Error in as.data.frame(goFc$greater): object 'goFc' not found
-~~~
-{: .error}
-
-
-
-~~~
 goGreater <- goGreater[goGreater$q.val < 0.01 & !is.na(goGreater$q.val),]
-~~~
-{: .r}
-
-
-
-~~~
-Error in eval(expr, envir, enclos): object 'goGreater' not found
-~~~
-{: .error}
-
-
-
-~~~
 goTermNames <- lapply(mget(rownames(goGreater), GOTERM), function(go) go@Term)
-~~~
-{: .r}
-
-
-
-~~~
-Error in rownames(goGreater): object 'goGreater' not found
-~~~
-{: .error}
-
-
-
-~~~
 goGreater$Term <- goTermNames[rownames(goGreater)]
-~~~
-{: .r}
-
-
-
-~~~
-Error in eval(expr, envir, enclos): object 'goTermNames' not found
-~~~
-{: .error}
-
-
-
-~~~
 goGreater
 ~~~
 {: .r}
@@ -769,9 +507,20 @@ goGreater
 
 
 ~~~
-Error in eval(expr, envir, enclos): object 'goGreater' not found
+              p.geomean stat.mean        p.val        q.val set.size
+GO:0009060 5.354608e-11  7.793566 5.354608e-11 3.742871e-08       47
+GO:0006790 1.271839e-06  4.855632 1.271839e-06 4.445079e-04       94
+GO:0015688 3.250781e-05  5.274365 3.250781e-05 5.680740e-03       10
+GO:0015891 3.250781e-05  5.274365 3.250781e-05 5.680740e-03       10
+GO:0006812 5.357835e-05  3.935893 5.357835e-05 7.490254e-03      150
+                   exp1                              Term
+GO:0009060 5.354608e-11               aerobic respiration
+GO:0006790 1.271839e-06 sulfur compound metabolic process
+GO:0015688 3.250781e-05            iron chelate transport
+GO:0015891 3.250781e-05             siderophore transport
+GO:0006812 5.357835e-05                  cation transport
 ~~~
-{: .error}
+{: .output}
 
 > ## Which genes decreased in transition to aerobic conditions?
 >

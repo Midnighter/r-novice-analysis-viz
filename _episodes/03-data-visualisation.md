@@ -1,6 +1,6 @@
 ---
 title: "Using ggplot2 to visualize your data"
-teaching: 45
+teaching: 35
 exercises: 0
 questions:
 - "What is ggplot2 and why should I use it?"
@@ -22,7 +22,7 @@ keypoints:
 
 
 ## The grammar of graphics <!-- 2 -->
-
+    
 While plain R comes with its own plotting capabilities, these functions are quiet cumbersome to use as you typically have to write code for every little change you want and the code you write mostly is not very re-usable. Based on the [Grammar of graphics](https://www.amazon.com/exec/obidos/ASIN/0387245448/7210-20), the ggplot2 package implements the idea that graphs can be expressed quite generally using the right way to describe them. For any given plot we have two basic concepts
 
 - **Aesthetic:** What we map data to, like the x or y axis, or higher values being a darker color or bigger circles.
@@ -102,11 +102,16 @@ ggplot(growth, aes(x=timepoint, y=od, color=well)) +
 > How can you plot only well 'a'?
 >
 > > ## Solution
-> > ~~
-> > ggplot(growth[growth$well == 'a'], aes(x=timepoint, y=od))
+> > 
+> > ~~~
+> > ggplot(growth[growth$well == 'a', ], aes(x=timepoint, y=od)) +
 > >    geom_point() +
 > >    geom_line()
-> > ~~
+> > ~~~
+> > {: .r}
+> > 
+> > <img src="../fig/rmd-03-data-visualisation-unnamed-chunk-7-1.png" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" style="display: block; margin: auto;" />
+> {: .solution}
 {: .challenge}
 
 ## Transformations and trend-lines <!-- 4 -->
@@ -121,7 +126,7 @@ ggplot(growth, aes(x=timepoint, y=od, color=well)) +
 ~~~
 {: .r}
 
-<img src="../fig/rmd-03-data-visualisation-unnamed-chunk-7-1.png" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" style="display: block; margin: auto;" />
+<img src="../fig/rmd-03-data-visualisation-unnamed-chunk-8-1.png" title="plot of chunk unnamed-chunk-8" alt="plot of chunk unnamed-chunk-8" style="display: block; margin: auto;" />
 
 Adding a smoothing trend-line is also so common that there is an easy way to do this.
 
@@ -140,19 +145,24 @@ ggplot(growth, aes(x=timepoint, y=od, color=well)) +
 ~~~
 {: .output}
 
-<img src="../fig/rmd-03-data-visualisation-unnamed-chunk-8-1.png" title="plot of chunk unnamed-chunk-8" alt="plot of chunk unnamed-chunk-8" style="display: block; margin: auto;" />
+<img src="../fig/rmd-03-data-visualisation-unnamed-chunk-9-1.png" title="plot of chunk unnamed-chunk-9" alt="plot of chunk unnamed-chunk-9" style="display: block; margin: auto;" />
 
 > ## Use aesthetics to interpret the data!
 >
 > Use columns `concentration` and/or `concentration_level` to come up with a plot that shows the effect. You may need the 'dummy' aesthetic `group`.
 >
 > > ## Solution (example)
-> > ~~
+> > 
+> > ~~~
 > > ggplot(growth, aes(x=timepoint, y=od, color=concentration, group=well)) +
 > >     geom_point() +
 > >     geom_line() +
 > >     scale_color_continuous(trans='log10')
-> > ~~
+> > ~~~
+> > {: .r}
+> > 
+> > <img src="../fig/rmd-03-data-visualisation-unnamed-chunk-10-1.png" title="plot of chunk unnamed-chunk-10" alt="plot of chunk unnamed-chunk-10" style="display: block; margin: auto;" />
+> {: .solution}
 {: .challenge}
 
 ## Other common geometries <!-- 5 -->
@@ -166,7 +176,7 @@ ggplot(growth[growth$timepoint == 1, ], aes(y=od, x=well)) +
 ~~~
 {: .r}
 
-<img src="../fig/rmd-03-data-visualisation-unnamed-chunk-9-1.png" title="plot of chunk unnamed-chunk-9" alt="plot of chunk unnamed-chunk-9" style="display: block; margin: auto;" />
+<img src="../fig/rmd-03-data-visualisation-unnamed-chunk-11-1.png" title="plot of chunk unnamed-chunk-11" alt="plot of chunk unnamed-chunk-11" style="display: block; margin: auto;" />
 
 Assuming all strains had reached stationary phase after 50 minutes and we wanted to compare the final ODs, a boxplot would be a good choice.
 
@@ -178,7 +188,7 @@ ggplot(growth[growth$time > 50, ], aes(x=well, y=od, fill=concentration)) +
 ~~~
 {: .r}
 
-<img src="../fig/rmd-03-data-visualisation-unnamed-chunk-10-1.png" title="plot of chunk unnamed-chunk-10" alt="plot of chunk unnamed-chunk-10" style="display: block; margin: auto;" />
+<img src="../fig/rmd-03-data-visualisation-unnamed-chunk-12-1.png" title="plot of chunk unnamed-chunk-12" alt="plot of chunk unnamed-chunk-12" style="display: block; margin: auto;" />
 
 For other data, a histogram may be the right choice. Let's load the built-in `diamonds` dataset for an example.
 
@@ -197,7 +207,7 @@ ggplot(diamonds, aes(carat)) +
 ~~~
 {: .output}
 
-<img src="../fig/rmd-03-data-visualisation-unnamed-chunk-11-1.png" title="plot of chunk unnamed-chunk-11" alt="plot of chunk unnamed-chunk-11" style="display: block; margin: auto;" />
+<img src="../fig/rmd-03-data-visualisation-unnamed-chunk-13-1.png" title="plot of chunk unnamed-chunk-13" alt="plot of chunk unnamed-chunk-13" style="display: block; margin: auto;" />
 
 > ## Explore other geometries
 >
@@ -216,7 +226,7 @@ ggplot(growth, aes(x=timepoint, y=od)) +
 ~~~
 {: .r}
 
-<img src="../fig/rmd-03-data-visualisation-unnamed-chunk-12-1.png" title="plot of chunk unnamed-chunk-12" alt="plot of chunk unnamed-chunk-12" style="display: block; margin: auto;" />
+<img src="../fig/rmd-03-data-visualisation-unnamed-chunk-14-1.png" title="plot of chunk unnamed-chunk-14" alt="plot of chunk unnamed-chunk-14" style="display: block; margin: auto;" />
 
 We can also use bivariate faceting, let's read a plate of growth curves to illustrate this.
 
@@ -231,7 +241,8 @@ ggplot(plate, aes(x=time, y=od)) +
 ~~~
 {: .r}
 
-<img src="../fig/rmd-03-data-visualisation-unnamed-chunk-13-1.png" title="plot of chunk unnamed-chunk-13" alt="plot of chunk unnamed-chunk-13" style="display: block; margin: auto;" />
+<img src="../fig/rmd-03-data-visualisation-unnamed-chunk-15-1.png" title="plot of chunk unnamed-chunk-15" alt="plot of chunk unnamed-chunk-15" style="display: block; margin: auto;" />
+
 ## Themes <!-- 2 -->
 If you don't like the default appearance, ggplot2 comes with flexible ways to customize your plots. The most high-level way of doing this is to use themes.
 
@@ -245,7 +256,7 @@ ggplot(growth, aes(x=timepoint, y=od, color=concentration, group=well)) +
 ~~~
 {: .r}
 
-<img src="../fig/rmd-03-data-visualisation-unnamed-chunk-14-1.png" title="plot of chunk unnamed-chunk-14" alt="plot of chunk unnamed-chunk-14" style="display: block; margin: auto;" />
+<img src="../fig/rmd-03-data-visualisation-unnamed-chunk-16-1.png" title="plot of chunk unnamed-chunk-16" alt="plot of chunk unnamed-chunk-16" style="display: block; margin: auto;" />
 
 > ## Try other themes
 >

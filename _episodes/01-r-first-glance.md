@@ -157,7 +157,7 @@ mean(randomNumbers)
 
 
 ~~~
-[1] -0.03041639
+[1] 0.2680998
 ~~~
 {: .output}
 
@@ -404,3 +404,4 @@ For a rough comparison:
 - R lists are like dicts (`{}`) in Python
 - R data frames are very much like `pandas.DataFrame` in Python
 
+    
