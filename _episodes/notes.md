@@ -11,6 +11,36 @@ library(dplyr)
 ```
 
 ```
+## The following object is masked from 'package:AnnotationDbi':
+## 
+##     select
+```
+
+```
+## The following objects are masked from 'package:IRanges':
+## 
+##     collapse, desc, intersect, setdiff, slice, union
+```
+
+```
+## The following objects are masked from 'package:S4Vectors':
+## 
+##     first, intersect, rename, setdiff, setequal, union
+```
+
+```
+## The following object is masked from 'package:Biobase':
+## 
+##     combine
+```
+
+```
+## The following objects are masked from 'package:BiocGenerics':
+## 
+##     combine, intersect, setdiff, union
+```
+
+```
 ## The following objects are masked from 'package:stats':
 ## 
 ##     filter, lag
