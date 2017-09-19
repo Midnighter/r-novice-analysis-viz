@@ -192,7 +192,7 @@ Loadings structure:
 
 > ## What did the `t` do? Why `+ 0.25`?
 >
-> `prcomp` requires the `variables` in this case the genes, to come in
+> `pca` requires the `variables` in this case the genes, to come in
 > the rows so we used `t` to transpose the data matrix. Since we know
 > gene expression values tend to follow log-normal distributions, we
 > use `log2` to transform the data. Why did we add the magic value
@@ -200,7 +200,7 @@ Loadings structure:
 > {: .r}
 {: .challenge}
 
-To get a nice data frame that we can use for plotting we simply use `merge` with the samples data fram.
+To get a nice data frame that we can use for plotting we simply use `merge` with the samples data frame.
 
 
 ~~~
@@ -240,11 +240,9 @@ The time-series can easily be recognized which is a good sign that experiment wa
 > {: .r}
 {: .challenge}
 
-Scatter plots are also a great way to FIXME
-
 ## Differentially expressed genes <!-- 10 -->
 
-From our PCA we could, as expected, see that the last timepoint is the most dissimilar from the the anaerobic condition. Let's make a comparison between the anaerobic and 10 min anearobic samples and see which genes are differentially expressed between those.
+From our PCA we could, as expected, see that the last time-point is the most dissimilar from the the anaerobic condition. Let's make a comparison between the anaerobic and 10 min anaerobic samples and see which genes are differentially expressed between those.
 
 With `edgeR` we will fit a simple generalized linear model to get estimates for differential expression and for that we first need to create a *design matrix* that accurately describes the comparison we are after.
 
@@ -304,7 +302,7 @@ Coefficient:  t10
 ~~~
 {: .output}
 
-What did we just do? The `estimateDisp` function is needed to estimate variance components robustly, `glmFit` fits the model we are after that essentially has one overall mean of expression and another mean for the t10 samples. glmLRT performes a log-likelihood ratio test against the null-hypothesis that t10 has the same average as all the samples together. Then with `topTags` we extract a table with the 10 most differentially expressed genes.
+What did we just do? The `estimateDisp` function is needed to estimate variance components robustly, `glmFit` fits the model we are after that essentially has one overall mean of expression and another mean for the t10 samples. glmLRT performs a log-likelihood ratio test against the null-hypothesis that t10 has the same average as all the samples together. Then with `topTags` we extract a table with the 10 most differentially expressed genes.
 
 > ## Write the expression estimates to a file
 >
@@ -331,8 +329,33 @@ What did we just do? The `estimateDisp` function is needed to estimate variance 
 > If you don't have read counts, but e.g. abundance estimates for proteomics, use the `limma` package instead. Syntax and usage is very similar to edgeR, read the `limmaUsersGuide()`!
 > {: .r}
 {: .callout}
+
+Let's visualize the magnitude of the expression changes with a volcanoplot.
+
+
+~~~
+ggplot(lrt$table, aes(logFC, -log10(PValue))) +
+    geom_point()
+~~~
+{: .r}
+
+<img src="../fig/rmd-04-explore-gene-expression-unnamed-chunk-16-1.png" title="plot of chunk unnamed-chunk-16" alt="plot of chunk unnamed-chunk-16" style="display: block; margin: auto;" />
+
+or perhaps
+
+
+~~~
+lrt$table$signif <- p.adjust(lrt$table$PValue, 'fdr') < 0.001
+ggplot(lrt$table, aes(logFC, -log10(PValue), color=signif)) +
+    geom_point() +
+    scale_color_manual(values=c('grey', 'steelblue'), name='FDR < 0.001')
+~~~
+{: .r}
+
+<img src="../fig/rmd-04-explore-gene-expression-unnamed-chunk-17-1.png" title="plot of chunk unnamed-chunk-17" alt="plot of chunk unnamed-chunk-17" style="display: block; margin: auto;" />
+
 ## Short introduction to annotation packages <!-- 5 -->
-A great assset in Bioconductor are the annotation packages which makes differential gene expression analysis quite straight-forward (if you work on the most common model species..). The most relevant packages are the *organism annotation packages* and they are all named `org.`, then a species code, the main identifier, and `.db`. For E. coli K-12, entrez gene identifiers, it is thus `org.EcK12.db`. To get an overview of what is in an annotation package call the package name minus the `.db` as a function.
+A great asset in Bioconductor are the annotation packages which makes differential gene expression analysis quite straight-forward (if you work on the most common model species..). The most relevant packages are the *organism annotation packages* and they are all named `org.`, then a species code, the main identifier, and `.db`. For E. coli K-12, entrez gene identifiers, it is thus `org.EcK12.db`. To get an overview of what is in an annotation package call the package name minus the `.db` as a function.
 
 
 ~~~

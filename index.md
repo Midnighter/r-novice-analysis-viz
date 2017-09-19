@@ -25,6 +25,7 @@ Our goal is to be able to
 - Read data into R
 - Make useful visualisations
 - Perform common data analysis tasks
+- Use Bioconductor package edgeR and gaga to analyze gene expression data
 - Learn how to find packages that simplify your work
 
 > ## Prerequisites

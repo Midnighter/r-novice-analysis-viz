@@ -14,7 +14,7 @@ objectives:
 - "Learn how to use facets."
 - "Learn to change common defaults."
 keypoints:
-- "ggplot2 is highlevel but so flexible that it replaces most needs for R's base graphics"
+- "ggplot2 is high-level but so flexible that it replaces most needs for R's base graphics"
 - "Generating intuitive, publication-ready graphs in ggplot2 is easy once you get the hang of it"
 ---
 
@@ -30,7 +30,7 @@ While plain R comes with its own plotting capabilities, these functions are quie
 
 ggplot2 provides a large set of geometries and the means to map aesthetics to these along with capability to arranging plots nicely.
 ## Input data <!-- 2 -->
-Your data must be in a data frame to be really useful with ggplot2. Ideally, the data should also be fairly normalized (aka *long* format), i.e. each column should have all the values that go on each asthetic, not spread over multiple columns (aka *wide* format) e.g.
+Your data must be in a data frame to be really useful with ggplot2. Ideally, the data should also be fairly normalized (aka *long* format), i.e. each column should have all the values that go on each aesthetic, not spread over multiple columns (aka *wide* format) e.g.
 
 | strain  | od | medium |
 |---------|----|--------|
@@ -59,7 +59,7 @@ growth <- read.table('data/yeast-growth.csv', sep=',', header=TRUE)
 ~~~
 {: .r}
 
-We know map timepoint and the optical density to asthetics in a plotting object
+We know map timepoint and the optical density to aesthetics in a plotting object
 
 
 ~~~

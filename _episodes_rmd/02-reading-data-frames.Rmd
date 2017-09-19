@@ -8,10 +8,12 @@ questions:
 - "How do I calculate simple statistics like mean and median?"
 - "How can I access documentation?"
 - "How do I install a package?"
+- "How do I reshape data?"
 objectives:
 - "Select individual values and subsections from data."
 - "Perform operations on a data frame of data."
 - "Be able to install a package from CRAN."
+- "Be aware of useful packages for working with data frames."
 keypoints:
 - "Use `read.table` and `write.table` to import / export data."
 - "The function `str` describes the data frame."
@@ -21,6 +23,7 @@ keypoints:
 - "Use `#` to add comments to programs."
 - "Use `mean`, `max`, `min` and `sd` to calculate simple statistics."
 - "Use split-apply to calculate statistics across the groups in a data frame."
+- "Use dplyr/tidyr in R for manipulating data frames"
 ---
 
 
@@ -178,7 +181,58 @@ tapply(growth$od, growth$well, max)
 <img src="../fig/split-apply.svg" alt="the split apply approach, divide data to chunks, then run a given function on each ot the chunk sepearately" />
 
 There are many more `apply` style functions among which `lapply` for applying functions to elements of lists, `apply` for applying functions to rows or columns of a matrix.
-## Gentle introduction to dplyr and tidyr
+
+## Gentle introduction to dplyr and tidyr <!-- 10 -->
 Two great packages for doing much more advanced things with data frame are `dplyr` and `tidyr` which together overlaps a lot with Python pandas but it is not practical to use R completely without these so let's cover the basics.
 
-FIXME
+As an example, let's take some mildly messy data and make it easier to use in R. The exact process for cleaning up data is of course entirely dependent on the problem with your data but this example demonstrates the basic process.
+
+Original data looks like this
+
+```{r}
+messy <- read.csv("data/yeast-growth-messy.csv")
+messy[, 1:10]
+```
+
+Problems
+- OD measurements for each replicate are on different columns
+- There are no sensical header so we would have to work with "messy$V1" etc
+
+Let's fix this using dplyr and tidyr. 
+
+```{r, message=FALSE, warning=FALSE}
+library(dplyr)
+library(tidyr)
+```
+
+Both these packages make use of the `%>%` operator which allows you to chain functions with each other, e.g. instead of.
+
+```{r, eval=FALSE}
+mean(rnorm(10))
+```
+
+we can write
+
+```{r, eval=FALSE}
+rnorm(10) %>%
+    mean()
+```
+
+For this simple example, the first might look easier but with many calls it really helps readability.
+
+```{r}
+tidy <- as.tbl(messy) %>%
+    dplyr::mutate(timepoint=1:7)  %>%
+    tidyr::gather(well, od, -V1, -V2, -V3, -timepoint) %>%
+    dplyr::rename(concentration_level=V2) %>%
+    dplyr::rename(concentration=V3) %>%
+    dplyr::select(-V1)
+tidy
+```
+
+How could we reverse the process if we for some reason wanted a wide format again?
+
+```{r}
+unite(tidy, key, concentration_level, concentration, timepoint) %>%
+    spread(key, od)
+```

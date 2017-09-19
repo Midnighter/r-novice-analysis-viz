@@ -3,6 +3,9 @@ library(growthcurver)
 library(tidyr)
 library(dplyr)
 
+write.table(grofit.data, file="data/yeast-growth-messy.csv", sep=",",
+            quote=FALSE, row.names=FALSE)
+
 growth <-
     grofit.data %>%
     mutate(well=letters[1:7]) %>%

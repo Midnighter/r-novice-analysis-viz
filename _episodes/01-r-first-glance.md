@@ -6,11 +6,13 @@ questions:
 - "What is R and when should I use it?"
 - "How do I use the RStudio graphical user interface?"
 - "How do I assign variables?"
+- "How can I create a function?"
 objectives:
 - "Get introduced to R and RStudio."
 - "Learn basic R syntax."
 - "Assign values to variables."
 - "Be able to install a package from CRAN."
+- "Be able to define a simple function."
 keypoints:
 - "R is a strong statistical computing environment"
 - "Thousands of packages for R"
@@ -50,7 +52,7 @@ In this one-day course we will learn
   development environment for R
 - R's basic syntax
 - Re..
-- Visualising data using ggplot2
+- Visualizing data using ggplot2
 
 ## RStudio - a graphical interface to R <!-- 1 -->
 
@@ -157,7 +159,7 @@ mean(randomNumbers)
 
 
 ~~~
-[1] 0.2680998
+[1] 0.4869248
 ~~~
 {: .output}
 
@@ -166,7 +168,7 @@ mean(randomNumbers)
 > Historically, R programmers have used a variety of conventions for naming variables. The `.` character
 > in R can be a valid part of a variable name; thus the above assignment could have easily been `random.numbers <- rnorm(10)`.
 > This is often confusing to R newcomers who have programmed in languages where `.` has a more significant meaning (like in Python).
-> There are many 'standards' in use e.g. `random.numbers`, `random_numbers` or `randomNumbers`. Choose what you prefer, but, just as with british or american spelling, the rule is to be consistent!
+> There are many 'standards' in use e.g. `random.numbers`, `random_numbers` or `randomNumbers`. Choose what you prefer, but, just as with British or American spelling, the rule is to be consistent!
 {: .callout}
 
 
@@ -228,6 +230,9 @@ All R functions are documented and you can read about them using RStudio documen
 ?mean
 ~~~
 {: .r}
+
+Or, hit F1 while the cursor are in the object you want to get read documentation about.
+
 ## R data types <!-- 5 -->
 R has three main data types that we need to know about, the two main ones are `numeric` which is both integers and floats, `character`, and `factor` which is like integer but with a character label attached to number (or `level`). 
 
@@ -404,4 +409,35 @@ For a rough comparison:
 - R lists are like dicts (`{}`) in Python
 - R data frames are very much like `pandas.DataFrame` in Python
 
-    
+## Functions <!-- 5 -->
+
+Although this course is focused on applied data analysis and not so much on the programming, it is often useful to be able to make simply functions to avoid having to repeat your code.
+
+Functions in R behave very similar to Python
+
+
+~~~
+pintsToLitre <- function(pints) {
+    litre <- pints * 0.56
+    return(litre)
+}
+~~~
+{: .r}
+
+> ## Fill in the blanks
+>
+> What should the values of the blanks be to get the corresponding output?
+> 
+> ~~~
+> plusValue <- ____ {
+>     return(x + ____)
+> }
+> plusValue(1)
+> plusValue(1, 3)
+> ~~~
+> {: .r}
+> ```
+> 2
+> 4
+> ```
+{: .challenge}

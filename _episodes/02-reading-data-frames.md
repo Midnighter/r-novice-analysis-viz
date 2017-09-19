@@ -8,10 +8,12 @@ questions:
 - "How do I calculate simple statistics like mean and median?"
 - "How can I access documentation?"
 - "How do I install a package?"
+- "How do I reshape data?"
 objectives:
 - "Select individual values and subsections from data."
 - "Perform operations on a data frame of data."
 - "Be able to install a package from CRAN."
+- "Be aware of useful packages for working with data frames."
 keypoints:
 - "Use `read.table` and `write.table` to import / export data."
 - "The function `str` describes the data frame."
@@ -21,6 +23,7 @@ keypoints:
 - "Use `#` to add comments to programs."
 - "Use `mean`, `max`, `min` and `sd` to calculate simple statistics."
 - "Use split-apply to calculate statistics across the groups in a data frame."
+- "Use dplyr/tidyr in R for manipulating data frames"
 ---
 
 
@@ -434,5 +437,124 @@ tapply(growth$od, growth$well, max)
 <img src="../fig/split-apply.svg" alt="the split apply approach, divide data to chunks, then run a given function on each ot the chunk sepearately" />
 
 There are many more `apply` style functions among which `lapply` for applying functions to elements of lists, `apply` for applying functions to rows or columns of a matrix.
-## Gentle introduction to dplyr and tidyr
+
+## Gentle introduction to dplyr and tidyr <!-- 10 -->
 Two great packages for doing much more advanced things with data frame are `dplyr` and `tidyr` which together overlaps a lot with Python pandas but it is not practical to use R completely without these so let's cover the basics.
+
+As an example, let's take some mildly messy data and make it easier to use in R. The exact process for cleaning up data is of course entirely dependent on the problem with your data but this example demonstrates the basic process.
+
+Original data looks like this
+
+
+~~~
+messy <- read.csv("data/yeast-growth-messy.csv")
+messy[, 1:10]
+~~~
+{: .r}
+
+
+
+~~~
+     V1     V2    V3    V4    V5    V6    V7    V8    V9   V10
+1 Test1    low 1e-02 0.017 0.015 0.016 0.018 0.022 0.021 0.025
+2 Test1    low 3e-02 0.017 0.018 0.015 0.019 0.021 0.020 0.024
+3 Test1 medium 1e+00 0.018 0.021 0.016 0.020 0.024 0.023 0.025
+4 Test1 medium 3e+00 0.017 0.015 0.017 0.018 0.022 0.022 0.024
+5 Test1 medium 3e+01 0.017 0.019 0.016 0.022 0.022 0.022 0.024
+6 Test1   high 1e+02 0.016 0.015 0.015 0.018 0.021 0.020 0.023
+7 Test1   high 3e+02 0.015 0.016 0.015 0.018 0.021 0.019 0.021
+~~~
+{: .output}
+
+Problems
+- OD measurements for each replicate are on different columns
+- There are no sensical header so we would have to work with "messy$V1" etc
+
+Let's fix this using dplyr and tidyr. 
+
+
+~~~
+library(dplyr)
+library(tidyr)
+~~~
+{: .r}
+
+Both these packages make use of the `%>%` operator which allows you to chain functions with each other, e.g. instead of.
+
+
+~~~
+mean(rnorm(10))
+~~~
+{: .r}
+
+we can write
+
+
+~~~
+rnorm(10) %>%
+    mean()
+~~~
+{: .r}
+
+For this simple example, the first might look easier but with many calls it really helps readability.
+
+
+~~~
+tidy <- as.tbl(messy) %>%
+    dplyr::mutate(timepoint=1:7)  %>%
+    tidyr::gather(well, od, -V1, -V2, -V3, -timepoint) %>%
+    dplyr::rename(concentration_level=V2) %>%
+    dplyr::rename(concentration=V3) %>%
+    dplyr::select(-V1)
+tidy
+~~~
+{: .r}
+
+
+
+~~~
+# A tibble: 455 x 5
+   concentration_level concentration timepoint  well    od
+                <fctr>         <dbl>     <int> <chr> <dbl>
+ 1                 low         1e-02         1    V4 0.017
+ 2                 low         3e-02         2    V4 0.017
+ 3              medium         1e+00         3    V4 0.018
+ 4              medium         3e+00         4    V4 0.017
+ 5              medium         3e+01         5    V4 0.017
+ 6                high         1e+02         6    V4 0.016
+ 7                high         3e+02         7    V4 0.015
+ 8                 low         1e-02         1    V5 0.015
+ 9                 low         3e-02         2    V5 0.018
+10              medium         1e+00         3    V5 0.021
+# ... with 445 more rows
+~~~
+{: .output}
+
+How could we reverse the process if we for some reason wanted a wide format again?
+
+
+~~~
+unite(tidy, key, concentration_level, concentration, timepoint) %>%
+    spread(key, od)
+~~~
+{: .r}
+
+
+
+~~~
+# A tibble: 65 x 8
+    well high_100_6 high_300_7 low_0.01_1 low_0.03_2 medium_1_3 medium_3_4
+ * <chr>      <dbl>      <dbl>      <dbl>      <dbl>      <dbl>      <dbl>
+ 1   V10      0.023      0.021      0.025      0.024      0.025      0.024
+ 2   V11      0.024      0.024      0.028      0.027      0.027      0.026
+ 3   V12      0.023      0.022      0.026      0.025      0.025      0.025
+ 4   V13      0.025      0.024      0.028      0.028      0.028      0.028
+ 5   V14      0.027      0.025      0.030      0.031      0.029      0.030
+ 6   V15      0.029      0.027      0.032      0.032      0.031      0.032
+ 7   V16      0.029      0.027      0.033      0.033      0.035      0.034
+ 8   V17      0.032      0.028      0.037      0.037      0.038      0.036
+ 9   V18      0.033      0.028      0.041      0.038      0.038      0.038
+10   V19      0.035      0.031      0.042      0.042      0.041      0.041
+# ... with 55 more rows, and 1 more variables: medium_30_5 <dbl>
+~~~
+{: .output}
